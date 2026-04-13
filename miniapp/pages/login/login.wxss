@@ -1,0 +1,173 @@
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f4f6fb;
+  padding: 0 60rpx;
+}
+
+.hero-section {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 80rpx;
+}
+
+.hero-visual {
+  position: relative;
+  height: 240rpx;
+  width: 100%;
+  margin-bottom: 40rpx;
+}
+
+.spore {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 30%, rgba(79, 125, 255, 0.2), rgba(79, 125, 255, 0.05));
+  border: 2rpx solid rgba(79, 125, 255, 0.15);
+}
+
+.spore-1 {
+  width: 120rpx;
+  height: 120rpx;
+  right: 20%;
+  top: 20rpx;
+  animation: float-up 3.2s ease-in-out infinite;
+}
+
+.spore-2 {
+  width: 80rpx;
+  height: 80rpx;
+  left: 25%;
+  top: 60rpx;
+  animation: float-up 2.5s ease-in-out infinite;
+}
+
+.spore-3 {
+  width: 60rpx;
+  height: 60rpx;
+  right: 40%;
+  top: 140rpx;
+  animation: float-up 2.9s ease-in-out infinite;
+}
+
+.hero-runner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) skewX(-12deg);
+  width: 160rpx;
+  height: 80rpx;
+  border-radius: 40rpx;
+  background: #4f7dff;
+  color: #fff;
+  font-size: 36rpx;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10rpx 20rpx rgba(79, 125, 255, 0.3);
+}
+
+.app-name {
+  font-size: 64rpx;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 16rpx;
+}
+
+.app-slogan {
+  font-size: 28rpx;
+  color: #6b7280;
+}
+
+.login-box {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 40rpx;
+  padding: 60rpx 40rpx;
+  box-shadow: 0 20rpx 40rpx rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.welcome-text {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 24rpx;
+}
+
+.desc-text {
+  font-size: 26rpx;
+  color: #9ca3af;
+  line-height: 1.6;
+  margin-bottom: 40rpx;
+}
+
+.mode-tip {
+  font-size: 24rpx;
+  color: #6b7280;
+  margin-bottom: 22rpx;
+}
+
+.login-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  margin-bottom: 28rpx;
+}
+
+.login-btn {
+  width: 100% !important;
+  height: 100rpx;
+  border-radius: 50rpx;
+  background: linear-gradient(135deg, #4f7dff 0%, #775bff 100%) !important;
+  font-size: 32rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12rpx 24rpx rgba(79, 125, 255, 0.3);
+}
+
+.wechat-btn {
+  background: linear-gradient(135deg, #4f7dff 0%, #775bff 100%) !important;
+}
+
+.shared-btn {
+  color: #ffffff !important;
+  border: none !important;
+  background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%) !important;
+  box-shadow: 0 12rpx 24rpx rgba(34, 197, 94, 0.28);
+}
+
+.shared-tip {
+  margin-top: 16rpx;
+  font-size: 22rpx;
+  color: #6b7280;
+  text-align: center;
+}
+
+.agreement {
+  margin-top: 40rpx;
+  font-size: 22rpx;
+  color: #d1d5db;
+}
+
+.error-toast {
+  position: fixed;
+  bottom: 100rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 20rpx 40rpx;
+  border-radius: 40rpx;
+  font-size: 24rpx;
+}
+
+@keyframes float-up {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20rpx); }
+}

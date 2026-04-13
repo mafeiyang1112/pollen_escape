@@ -1,0 +1,118 @@
+.match-page {
+  transition: background 220ms ease;
+}
+
+.match-page.status-high {
+  background: linear-gradient(180deg, rgba(255, 90, 95, 0.08) 0%, #f7f9fb 26%);
+}
+
+.match-page.status-mid {
+  background: linear-gradient(180deg, rgba(255, 159, 67, 0.08) 0%, #f7f9fb 26%);
+}
+
+.match-page.status-low {
+  background: linear-gradient(180deg, rgba(60, 207, 145, 0.09) 0%, #f7f9fb 26%);
+}
+
+.match-page.status-unknown {
+  background: #f7f9fb;
+}
+
+.top-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.top-label {
+  color: #6b7280;
+  font-size: 24rpx;
+}
+
+.top-main {
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: 18rpx;
+}
+
+.pollen-num {
+  font-size: 86rpx;
+}
+
+.trend-arrow {
+  padding-bottom: 8rpx;
+  font-size: 56rpx;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.chart-card {
+  overflow: hidden;
+}
+
+canvas {
+  margin-top: 14rpx;
+  border-radius: 20rpx;
+  background: #fcfdff;
+}
+
+.score-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.delta {
+  position: absolute;
+  right: 24rpx;
+  top: 24rpx;
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #ff9f43;
+  opacity: 0;
+}
+
+.delta.show {
+  opacity: 1;
+  animation: score-pop 340ms ease-out;
+}
+
+.score-label {
+  color: #6b7280;
+  font-size: 24rpx;
+}
+
+.score-value {
+  margin-top: 8rpx;
+  font-size: 90rpx;
+  line-height: 1;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.combo-pill {
+  display: inline-flex;
+  margin-top: 16rpx;
+  height: 54rpx;
+  line-height: 54rpx;
+  padding: 0 22rpx;
+  border-radius: 27rpx;
+  font-size: 24rpx;
+  font-weight: 700;
+  background: rgba(255, 159, 67, 0.15);
+  color: #e27700;
+}
+
+.combo-pill.flash {
+  animation: flash 400ms ease-out;
+}
+
+.status-hint {
+  margin-top: 14rpx;
+  font-size: 28rpx;
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.action-row {
+  justify-content: flex-start;
+}

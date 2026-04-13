@@ -1,0 +1,6 @@
+{
+    "idf.currentSetup": "D:\\AI\\ESP\\v5.3.5\\esp-idf",
+    "idf.openOcdConfigs": [
+        "board/esp32s3-builtin.cfg"
+    ]
+}

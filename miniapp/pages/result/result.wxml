@@ -1,0 +1,73 @@
+<view class="page-wrap result-page {{statusClass}}">
+  <!-- 背景装饰 -->
+  <view class="background-decoration">
+    <view class="petal petal-1"></view>
+    <view class="petal petal-2"></view>
+    <view class="petal petal-3"></view>
+    <view class="petal petal-4"></view>
+    <view class="sparkle sparkle-1"></view>
+    <view class="sparkle sparkle-2"></view>
+    <view class="sparkle sparkle-3"></view>
+  </view>
+
+  <!-- 页面标题 -->
+  <view class="page-title">
+    <view class="main-title">花粉逃离大赛</view>
+    <view class="sub-title">我的战绩卡</view>
+  </view>
+
+  <!-- 卡通形象 -->
+  <view class="cartoon-character">
+    <view class="character">🐝</view>
+    <view class="flower">�</view>
+  </view>
+
+  <view class="card score-card glass-card">
+    <view class="score-label">本局得分</view>
+    <view class="final-score">{{resultView.finalScore}}</view>
+    <view class="rank-container">
+      <view class="trophy-icon">🏆</view>
+      <view class="rank-text">排名：#{{resultView.rankText}}</view>
+    </view>
+  </view>
+
+  <view class="card chart-card glass-card">
+    <view class="section-title">下降曲线</view>
+    <canvas
+      canvas-id="resultTrendCanvas"
+      style="{{chartStyle}}"
+      width="{{chartWidth}}"
+      height="{{chartHeight}}"
+    ></canvas>
+  </view>
+
+  <view class="card action-card glass-card">
+    <button class="cta-btn" type="primary" loading="{{generatingPoster}}" bindtap="generatePoster">生成战绩卡</button>
+    <view class="play-again" bindtap="playAgain">再来一局 ></view>
+    <view class="muted">分享战绩，继续冲榜</view>
+  </view>
+
+  <view class="card board-card glass-card">
+    <view class="section-title">本月排行榜</view>
+    <block wx:if="{{leaderboard.length > 0}}">
+      <block wx:for="{{leaderboard}}" wx:key="user_openid">
+        <view class="row board-row">
+          <view class="board-left">
+            <view class="rank-badge {{item.rank === 1 ? 'rank-1' : ''}} {{item.rank === 2 ? 'rank-2' : ''}} {{item.rank === 3 ? 'rank-3' : ''}}">{{item.rank}}</view>
+            <text class="board-name">{{item.nickname || '挑战者'}}</text>
+          </view>
+          <text class="board-score">{{item.total_score}}分</text>
+        </view>
+      </block>
+    </block>
+    <view wx:else class="muted">暂无榜单数据</view>
+  </view>
+
+<canvas 
+  type="2d" 
+  id="posterCanvas" 
+  style="width: 620px; height: 980px; position: fixed; left: -9999px; top: -9999px;"
+></canvas>
+
+  <view wx:if="{{lastError}}" class="error">{{lastError}}</view>
+</view>

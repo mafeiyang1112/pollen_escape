@@ -1,0 +1,100 @@
+<view class="page-wrap index-page {{themeClass}}">
+  <view class="hero-head">
+    <view class="hero-row">
+      <view class="hero-user" bindtap="goToLogin">
+        <image class="hero-avatar" src="{{avatarUrl || '/assets/default-avatar.png'}}"></image>
+        <view class="hero-name">{{nickname}}</view>
+      </view>
+    </view>
+    <view class="hero-title">花粉逃离</view>
+    <view class="hero-tags">
+      <view class="hero-tag">{{activeMatchId ? '比赛进行中' : '准备开始'}}</view>
+      <view class="hero-tag device-status">
+        <text class="status-dot {{latestView.isOnline ? 'online' : 'offline'}}"></text>
+        设备 {{latestView.onlineText}}
+      </view>
+    </view>
+  </view>
+
+  <view class="card gauge-panel">
+    <view class="gauge-title">实时花粉浓度</view>
+    <view class="gauge-wrap" style="{{gaugeWrapStyle}}">
+      <canvas
+        type="2d"
+        id="homeGaugeCanvas"
+        style="{{gaugeStyle}}"
+      ></canvas>
+      <view class="gauge-center">
+        <view class="gauge-number">{{latestView.pollenText}}</view>
+        <view class="gauge-unit">μg/m³</view>
+      </view>
+    </view>
+    <view class="status-line">
+      <view class="status-pill {{latestView.levelClass}}">{{latestView.levelText}}</view>
+      <view class="age-text">{{latestView.ageText}}</view>
+    </view>
+  </view>
+
+  <view class="action-panel">
+    <button
+      class="escape-btn {{(activeMatchId || ((latest && latest.pollen_value >= 60) && cooldownLeftSec <= 0 && !dailyLimitReached)) ? 'is-ready' : 'is-disabled'}}"
+      loading="{{starting}}"
+      disabled="{{starting || stopping || (cooldownLeftSec > 0) || (!activeMatchId && (dailyLimitReached || !latest || !latestView.isFresh || !(latest && latest.pollen_value >= 60)))}}"
+      bindtap="startChallenge"
+    >
+      {{activeMatchId ? '继续逃离' : (dailyLimitReached ? '今日次数已达上限' : (cooldownLeftSec > 0 ? ('冷却中 ' + cooldownLeftSec + 's') : (!latest ? '等待设备数据' : (!latestView.isFresh ? '等待新数据' : ((latest && latest.pollen_value >= 60) ? '开始逃离' : '浓度不足，等待时机')))))}}
+    </button>
+    <view class="status-hint-top">{{latestView.trendHint}}</view>
+    <view class="ghost-row">
+      <button class="ghost-btn" loading="{{stopping}}" bindtap="stopActiveMatch" wx:if="{{activeMatchId}}">结束本局</button>
+    </view>
+    <view class="refresh-btn" bindtap="refreshHome" wx:if="{{!loading}}">
+      <view class="refresh-icon"></view>
+    </view>
+  </view>
+
+  <view class="metrics-grid">
+    <view class="card metric-card">
+      <view class="metric-header">
+        <view class="metric-icon">🪙</view>
+        <view class="metric-label">本月积分</view>
+      </view>
+      <view class="metric-value">{{monthlyScore}}</view>
+    </view>
+    <view class="card metric-card">
+      <view class="metric-header">
+        <view class="metric-icon">🏆</view>
+        <view class="metric-label">当前排名</view>
+      </view>
+      <view class="metric-value">#{{monthlyRank}}</view>
+    </view>
+  </view>
+
+  <view class="card utility-panel">
+    <view class="utility-grid">
+      <view class="utility-item" bindtap="openMonthlyBoard">月榜</view>
+      <view class="utility-item" bindtap="openMyRecords">我的记录</view>
+      <view class="utility-item" bindtap="showRules">玩法说明</view>
+      <view class="utility-item" bindtap="changeNickname">修改昵称</view>
+    </view>
+    <view class="device-row">
+      <view class="device-label">设备</view>
+      <view class="device-value">{{deviceId || '--'}}</view>
+      <view class="debug-link" bindtap="openDebugSettings">⚙️ 调试</view>
+    </view>
+  </view>
+
+  <view class="sound-control card">
+    <view class="sound-meta">
+      <view class="sound-label">警报声音</view>
+      <view class="sound-desc">开启后设备会在高浓度时发出提示音</view>
+    </view>
+    <switch
+      class="sound-switch"
+      checked="{{soundEnabled}}"
+      bindchange="onSoundSwitchChange"
+    />
+  </view>
+
+  <view wx:if="{{lastError}}" class="error">{{lastError}}</view>
+</view>

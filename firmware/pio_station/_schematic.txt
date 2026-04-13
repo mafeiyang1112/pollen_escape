@@ -1,0 +1,218 @@
+                         1                                              2                                                 3                                  4                                     5                                                    6
+
+
+                    3V3
+                                                                               ESP32-S3主控芯片
+                            1
+                              H1
+                                                                                    U3 ESP32-S3-WROOM-1-N16R8                                         H2                                    USB-ISP
+                               1                                                                                         41                                  1
+                            2               3V3                                                                     GND                                    1
+                     CHIP_PU3 2                                            1                                             40                                  2 U0TXD
+                                                                             GND                                    GND        GPIO1                       2
+                     GPIO4 4 3                                             2                                             39                                  3 U0RXD                        USB2
+                                                                                                                                                                                                                                 VBUS     D3
+                                                                 CHIP_PU 3 3V3                                       IO1       GPIO2                       3
+                                                                                                                                                             4 GPIO1
+                     GPIO5 5 4                                                                                           38                                                                                                                                    5V
+                                                             R7    GPIO4 4 EN                                        IO2       U0TXD                       4
+                                                                                                                                                             5 GPIO2
+                                                                                                                                                                                     13            12
+                     GPIO6 6 5                                                                                           37                                                             SHELL GND                                               B5819W SL
+A                                                            10kΩ GPIO5 5 IO4                                      TXD0        U0RXD                       5
+                                                                                                                                                             6 GPIO42
+                                                                                                                                                                                                   11                                                                          A
+                     GPIO7 7 6                    C7                                                                     36                                                                   VBUS                            R22
+                                                                   GPIO6 6 IO5                                     RXD0        GPIO42                      6
+                                                                                                                                                             7 GPIO41
+                                                                                                                                                                                                   10
+                     GPIO15 8 7                   100nF                                                                  35                                                                    CC2
+                                                                   GPIO7 7 IO6                                      IO42       GPIO41                      7
+                                                                                                                                                             8 GPIO40
+                                                                                                                                                                                                   9                                    5.1kΩ
+                     GPIO16 9 8                                                                                          34                                                                   SBU1
+                                                                   GPIO15 8 IO7                                     IO41       GPIO40                      8
+                                                                                                                                                             9 GPIO39
+                                                                                                                                                                                                   8
+                     GPIO1710 9                                                                                          33                                                                    DP2                               CH340_D+
+                                                                   GPIO16 9 IO15                                    IO40       GPIO39                      9
+                                                                                                                                                             10 GPIO38
+                                                                                                                                                                                                   7
+                     GPIO1811 10                                                                                         32                                                                    DN1                               CH340_D-
+                                                                   GPIO17 10 IO16                                   IO39       GPIO38                     10
+                                                                                                                                                             11 GPIO37
+                                                                                                                                                                                                   6
+                     GPIO8 12 11                              C6                                                         31                                                                    DP1
+                                                                   GPIO18 11 IO17                                   IO38       GPIO37                     11
+                                                                                                                                                             12 GPIO36
+                                                                                                                                                                                                   5                                R23
+                     GPIO3 13 12                              1uF                                                        30                                                                    DN2
+                                                                   GPIO8 12 IO18                                    IO37       GPIO36                     12
+                                                                                                                                                             13 GPIO35
+                                                                                                                                                                                                   4
+                     GPIO4614 13                                                                                         29                                                                    CC1
+                                                                   GPIO19 13 IO8                                    IO36       GPIO35                     13
+                                                                                                                                                             14 GPIO0
+                                                                                                                                                                                                   3                                5.1kΩ
+                     GPIO9 15 14                                                                                         28                                                                   SBU2
+                                                                   GPIO20 14 IO19                                   IO35       GPIO0                      14
+                                                                                                                                                             15 GPIO45
+                                                                                                                                                                                                   2
+                     GPIO1016 15                                             IO20                                    IO0
+                                                                                                                         27
+                                                                                                                                                          15                         14
+                                                                                                                                                                                              VBUS
+                                                                                                                                                                                                   1
+                     GPIO1117 16                                                                                                                             16 GPIO48                  SHELL GND
+                                                                                                                                                          16
+                     GPIO1218 17                                                                                                                             17 GPIO47            TYPE-C 16PIN 2MD(073)
+                                                                                                                                                          17
+
+
+
+
+                                                                                        GPIO46 16 IO46
+
+                                                                                        GPIO10 18 IO10
+                                                                                        GPIO11 19 IO11
+                                                                                        GPIO12 20 IO12
+                                                                                        GPIO13 21 IO13
+                                                                                        GPIO14 22 IO14
+                                                                                        GPIO21 23 IO21
+                                                                                        GPIO47 24 IO47
+                                                                                        GPIO48 25 IO48
+                                                                                        GPIO45 26 IO45
+                     GPIO1319 18                                                                                                                             18 GPIO21
+
+
+
+
+                                                                                        GPIO3 15 IO3
+
+                                                                                        GPIO9 17 IO9
+                                                                                                                                                          18
+                 D2 GPIO1420 19                                                                                                                              19 GPIO20
+                                                                                                                                                          19
+                               20                                                                                                                            20 GPIO19
+    VBUS
+
+
+
+
+                           21                                                                                                                             20
+                               21                                                                                                                            21
+                           22                                                                                                                             21
+             B5819W SL         22                                                                                                                            22
+                                                                                                                                                          22
+               J1
+                              X6511WV-22H-C60D30
+                                                                                                                                                      X6511WV-22H-C60D30
+                                                                                                                                                                                   LED指示灯
+                                                                                                                                                                                    3V3                3V3
+B
+                                                                                                                                                                                                                                    WS2812B                                    B
+
+                  USB-OTG                            J4
+                                                                                                                                       USB to TTL                                           R1
+                                                                                                                                                                                                                                                                 GPIO48
+                                                                                                                                                                                                                R2          5V
+                                                                                                                                                                                            1kΩ                                                                           J3
+                                                                                                                                                                                                                470Ω
+                                                                                                                                           VBUS
+                                                        D1                                                                                        CHIP_PU                                                                           U11
+                  USB1                                                                                                        C4
+                                                                               5V                                                                                                                                                   1               4
+             13            12                                                                                                                              Q1                                  LED1                                   VDD       DIN
+                  SHELLGND                                   B5819W SL                                                                                                                                                              2               3
+                           11                                                                                                      100nF                                                                             LED2             DOUT      VSS
+                      VBUS                  R16                                                                               C5
+                           10                                                                                                                                        R5                                                             WS2812B
+                       CC2                                                                                                                                                  DTR
+                           9                        5.1kΩ
+                      SBU1
+                           8
+
+
+
+
+                                                                                                                                                                                    U0RXD
+                       DP2                                                                                                                                           10kΩ
+
+
+
+
+                                                                                                                                                                                                       U0TXD
+                           7                      GPIO20                                                                   10uF
+                       DN1                                                                                            U2
+                           6                      GPIO19
+                       DP1                                                                                          1                16
+                           5                      R17                                                   C1    U0RXD 2 GND       VCC
+                       DN2                                                                                                           15
+                           4                                                                            100nF U0TXD 3 TXD      R232        RTS             Q2
+                       CC1                                                                                                           14
+                           3                      5.1kΩ                                                                RXD     RTS#        DTR
+                      SBU2                                                                                          4                13
+                           2                                                                                           V3      DTR#
+             14
+                      VBUS
+                SHELL GND
+                           1
+                                                                                                         CH340_D+
+                                                                                                         CH340_D-
+                                                                                                                    5
+                                                                                                                    6
+                                                                                                                       D+     DCD#
+                                                                                                                                     12
+                                                                                                                                     11
+                                                                                                                                                                     R6
+                                                                                                                                                                            RTS                    POWER                                                     PWR
+                                                                                                                       D-        RI#                                 10kΩ
+           TYPE-C 16PIN 2MD(073)                                                                                    7                10                                                       5V                                          3V3
+                                                                                                                       NC.    DSR#
+C                                                                                                                   8
+                                                                                                                       OUT#    CTS#
+                                                                                                                                     9                                                                         U12                                R25                          C
+                                                                                                                                                  GPIO0
+                                                                                                                                                                                                                     VOUT 2
+                                                                                                                      CH340C                                                                           3                  4
+                                                                                                                                                                                                               VIN    TAB                         1kΩ
+                                                                                                                                                                                                                                                               KT-0603R
+                                                                                                                                                                                                                                                            LED3
+                                                                                                                                                                                                                   GND
+                                                                                                                                                                                                   C2                                C3
+
+
+
+
+                                                                                                                                                                                                                     1
+                                                                            按键                                                                                                                     10uF                              10uF
+                                                             CHIP_PU
+
+
+
+
+                                                                                        GPIO0
+
+
+
+
+                             3V3                                       C9                       C10
+
+
+                                                                       100nF                    100nF
+                                   R19
+                                   10kΩ                      1U5 2                  1U4 2
+
+                                                             3         4            3           4
+                                   J5
+
+
+D                                                                                                                                                                                                                                                                              D
+                                    GPIO3
+
+
+
+
+SS8050
+KT-0603R                 1                                              2                                                 3                                  4                                     5                                                    6
+

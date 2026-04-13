@@ -1,0 +1,91 @@
+<!-- 月度排行榜详情页 -->
+<view class="leaderboard-page">
+  <!-- 错误提示 - 优先显示 -->
+  <view class="error-state" wx:if="{{lastError && !loading}}">
+    <view class="error-icon">⚠️</view>
+    <view class="error-text">{{lastError}}</view>
+    <button class="retry-btn" bindtap="loadLeaderboard">重试</button>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-state" wx:elif="{{loading}}">
+    <view class="spinner"></view>
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <!-- 正常内容 -->
+  <view wx:else class="content-wrapper">
+    <!-- 头部 -->
+    <view class="board-header">
+      <view class="header-top">
+        <view class="back-btn" bindtap="goBack">
+          <view class="back-icon">←</view>
+        </view>
+        <view class="header-title">{{currentMonth}} 月度排行</view>
+        <view class="header-spacer"></view>
+      </view>
+      
+      <!-- 个人成绩卡片 -->
+      <view class="my-score-card" wx:if="{{userProfile}}">
+        <view class="my-score-container">
+          <view class="my-score-item">
+            <view class="score-label">我的排名</view>
+            <view class="score-value rank-badge {{userProfile.monthly.rank <= 3 ? 'rank-top' + userProfile.monthly.rank : ''}}">
+              {{userProfile.monthly.rank || '--'}}
+            </view>
+          </view>
+          <view class="my-score-item">
+            <view class="score-label">本月成绩</view>
+            <view class="score-value">{{userProfile.monthly.total_score}}</view>
+          </view>
+          <view class="my-score-item">
+            <view class="score-label">有效场数</view>
+            <view class="score-value">{{userProfile.monthly.valid_matches}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 排行榜列表 -->
+    <scroll-view scroll-y type="list" class="leaderboard-list" wx:if="{{leaderboard.length > 0}}">
+      <view class="leaderboard-container">
+        <view class="leaderboard-item" wx:for="{{leaderboard}}" wx:key="user_openid" wx:for-item="item" wx:for-index="idx">
+          <!-- 排名徽章 -->
+          <view class="rank-section">
+            <view class="rank-badge {{item.rank <= 3 ? 'rank-top' + item.rank : ''}}">
+              {{item.rank}}
+            </view>
+          </view>
+
+          <!-- 用户信息主体 -->
+          <view class="user-section">
+            <view class="user-header">
+              <image 
+                class="user-avatar" 
+                src="{{item.avatar_url || DefaultAvatar}}" 
+                mode="aspectFill"
+              />
+              <view class="user-name-wrap">
+                <view class="user-name">{{item.nickname || '花粉挑战者'}}</view>
+                <view class="user-stats">{{item.valid_matches}} 场 · 最高 {{item.best_match_score}} 分</view>
+              </view>
+            </view>
+          </view>
+
+          <!-- 总分显示 -->
+          <view class="score-section">
+            <view class="total-score">{{item.total_score}}</view>
+            <view class="score-unit">分</view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:elif="{{leaderboard.length === 0}}">
+      <view class="empty-icon">📊</view>
+      <view class="empty-text">暂无排行榜数据</view>
+      <view class="empty-hint">开始挑战后会出现在排行榜上</view>
+    </view>
+  </view>
+</view>

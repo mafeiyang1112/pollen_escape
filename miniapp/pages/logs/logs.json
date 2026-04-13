@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "月榜排行",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#f5f7fa",
+  "usingComponents": {
+  }
+}

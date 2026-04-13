@@ -1,0 +1,45 @@
+<view class="login-page">
+  <view class="hero-section">
+    <view class="hero-visual">
+      <view class="spore spore-1"></view>
+      <view class="spore spore-2"></view>
+      <view class="spore spore-3"></view>
+      <view class="hero-runner">RUN</view>
+    </view>
+    <view class="app-name">花粉逃离大赛</view>
+    <view class="app-slogan">远离高浓度，跑得越快分越高</view>
+  </view>
+
+  <view class="login-box">
+    <view class="welcome-text">欢迎参加竞赛</view>
+    <view class="desc-text">请选择登录方式：微信独立账号或共享测试账号</view>
+
+    <view class="mode-tip">当前模式：{{useShared ? '共享账号' : '独立账号'}}</view>
+
+    <view class="login-actions">
+      <button
+        class="login-btn wechat-btn"
+        type="primary"
+        loading="{{loading && loginMode === 'wechat'}}"
+        bindtap="onWechatLoginTap"
+      >
+        微信登录
+      </button>
+
+      <button
+        class="login-btn shared-btn"
+        type="default"
+        loading="{{loading && loginMode === 'shared'}}"
+        bindtap="onSharedLoginTap"
+      >
+        共享账号登录
+      </button>
+    </view>
+
+    <view class="agreement">
+      登录即表示同意《用户服务协议》与《隐私政策》
+    </view>
+  </view>
+
+  <view wx:if="{{lastError}}" class="error-toast">{{lastError}}</view>
+</view>

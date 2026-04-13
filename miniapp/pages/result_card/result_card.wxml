@@ -1,0 +1,166 @@
+<view class="page-wrap result-page {{statusClass}}">
+  <view class="hero-shell">
+    <view class="ambient ambient-orange"></view>
+    <view class="ambient ambient-green"></view>
+    <view class="petal petal-a"></view>
+    <view class="petal petal-b"></view>
+    <view class="petal petal-c"></view>
+    <view class="petal petal-d"></view>
+    <view class="petal petal-e"></view>
+
+    <view class="hero-copy">
+      <view class="brand-title">花粉逃离大赛</view>
+      <view class="brand-subtitle">我的战绩卡</view>
+    </view>
+
+    <view class="mascot-scene">
+      <view class="spark spark-a"></view>
+      <view class="spark spark-b"></view>
+      <view class="spark spark-c"></view>
+
+      <view class="lotus">
+        <view class="lotus-petal lotus-left"></view>
+        <view class="lotus-petal lotus-center"></view>
+        <view class="lotus-petal lotus-right"></view>
+        <view class="lotus-core"></view>
+      </view>
+
+      <view class="mascot">
+        <view class="mascot-arm arm-left"></view>
+        <view class="mascot-arm arm-right"></view>
+        <view class="mascot-body"></view>
+        <view class="mascot-head">
+          <view class="mascot-cheek cheek-left"></view>
+          <view class="mascot-cheek cheek-right"></view>
+          <view class="mascot-eye eye-left"></view>
+          <view class="mascot-eye eye-right"></view>
+          <view class="mascot-beak"></view>
+        </view>
+        <view class="mascot-leg leg-left"></view>
+        <view class="mascot-leg leg-right"></view>
+      </view>
+    </view>
+
+    <view class="hero-card">
+      <view class="hero-card-glow"></view>
+      <view class="hero-card-top">
+        <view class="score-tag">本局得分</view>
+        <view class="rank-pill">月榜 #{{resultView.rankText}}</view>
+      </view>
+
+      <view class="score-layout">
+        <view class="score-main">
+          <view class="score-hint">{{resultView.gradeDesc}}</view>
+          <view class="score-value">{{resultView.finalScore}}</view>
+          <view class="score-grade">{{resultView.gradeText}} 级表现</view>
+        </view>
+
+        <view class="score-side">
+          <view class="metric-card">
+            <view class="metric-icon clock-icon"></view>
+            <view class="metric-meta">
+              <view class="metric-label">时间</view>
+              <view class="metric-value">{{resultView.durationText}}</view>
+            </view>
+          </view>
+
+          <view class="metric-card">
+            <view class="metric-icon track-icon"></view>
+            <view class="metric-meta">
+              <view class="metric-label">逃离距离</view>
+              <view class="metric-value">{{resultView.distanceText}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="honor-ribbon">
+        <view class="trophy-icon">
+          <view class="trophy-handle handle-left"></view>
+          <view class="trophy-handle handle-right"></view>
+          <view class="trophy-cup"></view>
+          <view class="trophy-star">★</view>
+          <view class="trophy-stem"></view>
+          <view class="trophy-base trophy-base-top"></view>
+          <view class="trophy-base trophy-base-bottom"></view>
+        </view>
+
+        <view class="honor-copy">
+          <view class="honor-label">荣耀排名</view>
+          <view class="honor-value">#{{resultView.rankText}}</view>
+        </view>
+      </view>
+
+      <view class="footer-chip-row">
+        <view class="footer-chip">最高下探 {{resultView.bestDropText}}</view>
+        <view class="footer-chip">连击 {{resultView.comboText}}</view>
+        <view class="footer-chip">本月 {{resultView.monthScoreText}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card glass-card chart-card">
+    <view class="panel-head">
+      <view>
+        <view class="section-title">下降曲线</view>
+        <view class="panel-subtitle">查看这一局的空气走势变化</view>
+      </view>
+      <view class="panel-badge">{{resultView.gradeText}}</view>
+    </view>
+    <canvas
+      canvas-id="resultTrendCanvas"
+      class="trend-canvas"
+      style="{{chartStyle}}"
+      width="{{chartWidth}}"
+      height="{{chartHeight}}"
+    ></canvas>
+  </view>
+
+  <view class="card glass-card action-card">
+    <view class="panel-head compact">
+      <view>
+        <view class="section-title">分享战绩</view>
+        <view class="panel-subtitle">生成一张更有仪式感的战绩卡</view>
+      </view>
+    </view>
+    <button class="cta-btn poster-btn" type="primary" loading="{{generatingPoster}}" bindtap="generatePoster">
+      生成战绩卡
+    </button>
+    <view class="secondary-action" bindtap="playAgain">再来一局</view>
+  </view>
+
+  <view class="card glass-card board-card">
+    <view class="panel-head compact">
+      <view>
+        <view class="section-title">本月排行榜</view>
+        <view class="panel-subtitle">看看自己离榜首还有多远</view>
+      </view>
+    </view>
+
+    <block wx:if="{{leaderboard.length > 0}}">
+      <block wx:for="{{leaderboard}}" wx:key="user_openid">
+        <view class="board-row">
+          <view class="board-left">
+            <view class="board-rank rank-{{item.rank <= 3 ? item.rank : 'other'}}">{{item.rank}}</view>
+            <view class="board-meta">
+              <view class="board-name">{{item.nickname || '挑战者'}}</view>
+              <view class="board-note">{{item.valid_matches || 0}} 场 · 最佳 {{item.best_match_score || 0}} 分</view>
+            </view>
+          </view>
+          <view class="board-score">{{item.total_score}}分</view>
+        </view>
+      </block>
+    </block>
+
+    <view wx:else class="empty-text">暂无榜单数据</view>
+  </view>
+
+  <canvas
+    canvas-id="posterCanvas"
+    style="position: fixed; left: -9999px; top: -9999px; width: 310px; height: 490px;"
+    width="620"
+    height="980"
+  ></canvas>
+
+  <view wx:if="{{lastError}}" class="error">{{lastError}}</view>
+</view>

@@ -1,0 +1,111 @@
+menu "Pollen Escape PlatformIO Station"
+
+    config ESP_WIFI_SSID
+        string "WiFi SSID"
+        default "your-wifi-ssid"
+
+    config ESP_WIFI_PASSWORD
+        string "WiFi Password"
+        default "your-wifi-password"
+
+    config ESP_MAXIMUM_RETRY
+        int "Maximum WiFi retry"
+        range 1 100
+        default 10
+
+    config SENSOR_POST_URL
+        string "Sensor POST URL"
+        default "http://10.104.85.85:5000/data"
+
+    config SENSOR_DEVICE_ID
+        string "Device ID"
+        default "esp32-s3-real-001"
+
+    config SENSOR_AO_GPIO
+        int "GP2Y1023 AO GPIO"
+        range 1 20
+        default 14
+
+    config SENSOR_SAMPLE_PERIOD_MS
+        int "Sensor sample period (ms)"
+        range 50 60000
+        default 250
+
+    config SENSOR_POST_INTERVAL_SEC
+        int "Sensor upload interval (sec)"
+        range 1 3600
+        default 5
+
+    config SENSOR_CLEAN_AIR_MV
+        int "Clean-air baseline (mV)"
+        range 0 3300
+        default 500
+
+    config SENSOR_DENSE_AIR_MV
+        int "Dense-air reference (mV)"
+        range 1 3300
+        default 2200
+
+    config SENSOR_SCORE_MAX
+        int "Max uploaded score"
+        range 10 1000
+        default 120
+
+    config SENSOR_OUTPUT_INVERTED
+        bool "Invert AO mapping"
+        default n
+        help
+            Enable this if the measured voltage goes down as dust concentration rises.
+
+    config SENSOR_WARNING_THRESHOLD
+        int "Warning threshold"
+        range 0 1000
+        default 50
+
+    config SENSOR_ALARM_THRESHOLD
+        int "Alarm threshold"
+        range 0 1000
+        default 85
+
+    config I2S_BCLK_GPIO
+        int "MAX98357A BCLK GPIO"
+        range 0 48
+        default 5
+
+    config I2S_WS_GPIO
+        int "MAX98357A LRC/WS GPIO"
+        range 0 48
+        default 4
+
+    config I2S_DOUT_GPIO
+        int "MAX98357A DIN GPIO"
+        range 0 48
+        default 18
+
+    config ALARM_TONE_WARNING_HZ
+        int "Warning tone frequency"
+        range 100 5000
+        default 760
+
+    config ALARM_TONE_ALARM_HZ
+        int "Alarm tone frequency"
+        range 100 5000
+        default 980
+
+    config ALARM_WARNING_BEEP_MS
+        int "Warning beep duration (ms)"
+        range 10 5000
+        default 170
+
+    config ALARM_ALARM_BEEP_MS
+        int "Alarm beep duration (ms)"
+        range 10 5000
+        default 260
+
+    config ALARM_SOUND_ENABLED
+        bool "Alarm sound enabled"
+        default y
+        help
+            Disable this to mute all warning/alarm tones on the device.
+
+endmenu

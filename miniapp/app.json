@@ -1,0 +1,20 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/profile/profile",
+    "pages/index/index",
+    "pages/match/match",
+    "pages/result/result",
+    "pages/logs/logs"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "花粉逃离大赛",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#f4f6fb"
+  },
+  "style": "v2",
+  "componentFramework": "glass-easel",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

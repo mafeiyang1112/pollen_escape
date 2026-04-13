@@ -1,0 +1,41 @@
+<view class="page-wrap match-page {{statusClass}}">
+  <view class="card top-card">
+    <view class="top-label">当前浓度</view>
+    <view class="top-main row">
+      <view class="big-number pollen-num">{{currentPollenText}}</view>
+      <view class="trend-arrow">{{trendArrow}}</view>
+    </view>
+    <view class="row">
+      <view class="chip {{statusClass}}">{{statusText}}</view>
+      <view class="muted" wx:if="{{waitingForData}}">等待设备新数据...</view>
+    </view>
+  </view>
+
+  <view class="card chart-card">
+    <view class="section-title">最近 1 分钟趋势</view>
+    <canvas
+      canvas-id="trendCanvas"
+      style="{{chartStyle}}"
+      width="{{chartWidth}}"
+      height="{{chartHeight}}"
+    ></canvas>
+  </view>
+
+  <view class="card score-card">
+    <view class="delta {{showScoreDelta ? 'show' : ''}}">{{scoreDeltaText}}</view>
+    <view class="score-label">当前得分</view>
+    <view class="score-value">{{scoreText}}</view>
+    <view class="combo-pill {{comboFlash ? 'flash' : ''}}">🔥 {{comboText}}</view>
+    <view class="status-hint">{{statusHint}}</view>
+  </view>
+
+  <view class="card action-card">
+    <view class="row action-row">
+      <button size="mini" class="mini-btn" loading="{{polling}}" bindtap="fetchRealtime">立即刷新</button>
+      <button wx:if="{{match && match.status !== 'active'}}" size="mini" class="mini-btn" bindtap="goResult">查看结果</button>
+      <button wx:if="{{match && match.status === 'active'}}" size="mini" class="mini-btn" bindtap="backHome">返回首页</button>
+    </view>
+  </view>
+
+  <view wx:if="{{lastError}}" class="error">{{lastError}}</view>
+</view>
