@@ -1,7 +1,7 @@
 ﻿﻿﻿﻿﻿﻿const api = require('./utils/api')
 
-const LOCAL_API_BASE_URL = 'http://127.0.0.1:5000'
-const LAN_API_BASE_URL = 'http://10.104.85.85:5000'
+const LOCAL_API_BASE_URL = 'https://btaknzxzeczz.sealoshzh.site'
+const LAN_API_BASE_URL = 'https://btaknzxzeczz.sealoshzh.site'
 const SHARED_TEST_OPENID = 'dev_shared_esp32_001'
 const DEFAULT_USE_SHARED_TEST_OPENID = false
 const KEY_USER_OPENID = 'user_openid'

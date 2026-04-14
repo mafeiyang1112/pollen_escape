@@ -1,5 +1,5 @@
-const DEFAULT_LOCAL_API_BASE_URL = 'http://127.0.0.1:5000'
-const DEFAULT_LAN_API_BASE_URL = 'http://10.104.85.85:5000'
+const DEFAULT_LOCAL_API_BASE_URL = 'https://btaknzxzeczz.sealoshzh.site'
+const DEFAULT_LAN_API_BASE_URL = 'https://btaknzxzeczz.sealoshzh.site'
 const REQUEST_TIMEOUT_MS = 5000
 const PROBE_TIMEOUT_MS = 1800
 
