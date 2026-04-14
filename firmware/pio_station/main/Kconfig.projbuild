@@ -2,11 +2,11 @@ menu "Pollen Escape PlatformIO Station"
 
     config ESP_WIFI_SSID
         string "WiFi SSID"
-        default "your-wifi-ssid"
+        default "feiyang"
 
     config ESP_WIFI_PASSWORD
         string "WiFi Password"
-        default "your-wifi-password"
+        default "12345678"
 
     config ESP_MAXIMUM_RETRY
         int "Maximum WiFi retry"
