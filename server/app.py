@@ -765,10 +765,12 @@ def create_app() -> Flask:
         file_path = os.path.join(upload_dir, filename)
         file.save(file_path)
         
-        # 生成访问URL（假设使用本地开发服务器）
-        # 在生产环境中，应该使用CDN或其他存储服务
-        base_url = request.host_url.rstrip('/')
-        avatar_url = f"{base_url}/uploads/avatars/{filename}"
+        # 生成访问URL（优先使用反向代理透传的协议/主机，避免返回 http 链接）
+        forwarded_proto = (request.headers.get('X-Forwarded-Proto') or '').split(',')[0].strip()
+        forwarded_host = (request.headers.get('X-Forwarded-Host') or '').split(',')[0].strip()
+        scheme = forwarded_proto or request.scheme or 'http'
+        host = forwarded_host or request.host
+        avatar_url = f"{scheme}://{host}/uploads/avatars/{filename}"
         
         return jsonify({
             "ok": True,
