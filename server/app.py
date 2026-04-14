@@ -553,6 +553,19 @@ def create_app() -> Flask:
     app = Flask(__name__)
     app.config['UPLOAD_FOLDER'] = os.path.join(BASE_DIR, 'uploads')
 
+    # 配置日志级别为 INFO，使数据打印显示
+    app.logger.setLevel(logging.INFO)
+    
+    # 如果还没有handler，添加StreamHandler输出到控制台
+    if not app.logger.handlers:
+        handler = logging.StreamHandler()
+        handler.setLevel(logging.INFO)
+        formatter = logging.Formatter(
+            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        )
+        handler.setFormatter(formatter)
+        app.logger.addHandler(handler)
+
     # 配置静态文件服务
     @app.route('/uploads/<path:filename>')
     def uploaded_file(filename):
@@ -1684,4 +1697,7 @@ app = create_app()
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.getenv("PORT", "5000")), debug=True)
+    # 本地开发环境：使用 Flask 自带服务器
+    port = int(os.getenv("PORT", "5000"))
+    debug_mode = os.getenv("DEBUG", "False").lower() in ("true", "1", "yes")
+    app.run(host="0.0.0.0", port=port, debug=debug_mode)
