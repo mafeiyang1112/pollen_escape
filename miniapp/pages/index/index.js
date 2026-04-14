@@ -265,6 +265,16 @@ Page({
       const monthly = toMonthly(profileValue)
       const recentMatches = (profileValue && profileValue.recent_matches) || []
 
+      // Sync sound setting to device when connected
+      if (latestR.status === 'fulfilled' && this.data.deviceId) {
+        const soundEnabled = app.getSoundEnabled()
+        if (latestR.value.controls && latestR.value.controls.alarm_sound_enabled !== soundEnabled) {
+          api.setDeviceSound({ deviceId: this.data.deviceId, soundEnabled }).catch((err) => {
+            console.warn('[refreshHome] failed to sync sound setting:', err)
+          })
+        }
+      }
+
       // 闁告艾鏈鐐哄触鎼达綆浼傞柡鍕暩琚ㄩ柛婊冭嫰閵囨棃宕撹箛鎾崇厒闁哄牜鍓欏﹢瀵哥磽閹惧磭鎽?
       const backendNickname = profileUser && profileUser.nickname
       const backendAvatar = normalizeAvatarUrl(profileUser && profileUser.avatar_url)

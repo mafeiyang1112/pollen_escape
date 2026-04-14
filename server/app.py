@@ -987,6 +987,7 @@ def create_app() -> Flask:
             return err(f"no samples for device `{device_id}`", 404, code="NOT_FOUND")
 
         age_sec, age_source = calc_age_sec(int(row["ts_ms"]), int(row["received_at_ms"]))
+        alarm_sound_enabled = get_device_alarm_sound_enabled(db, device_id, default_value=True)
         return jsonify(
             {
                 "ok": True,
@@ -994,6 +995,9 @@ def create_app() -> Flask:
                     **row_to_dict(row),
                     "age_sec": age_sec,
                     "age_source": age_source,
+                },
+                "controls": {
+                    "alarm_sound_enabled": alarm_sound_enabled,
                 },
             }
         )

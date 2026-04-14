@@ -479,6 +479,20 @@ static void sensor_task(void *pvParameters)
 
 static void upload_task(void *pvParameters)
 {
+    // Wait for WiFi connection before starting uploads
+    EventBits_t bits = xEventGroupWaitBits(
+        s_wifi_event_group,
+        WIFI_CONNECTED_BIT,
+        pdFALSE,
+        pdFALSE,
+        portMAX_DELAY);
+    
+    if (bits & WIFI_CONNECTED_BIT) {
+        // Upload immediately upon WiFi connection to sync remote settings like alarm_sound_enabled
+        ESP_LOGI(TAG, "uploading sensor data to sync remote settings...");
+        post_sensor_data_once();
+    }
+
     while (1) {
         post_sensor_data_once();
         vTaskDelay(pdMS_TO_TICKS(CONFIG_SENSOR_POST_INTERVAL_SEC * 1000));
