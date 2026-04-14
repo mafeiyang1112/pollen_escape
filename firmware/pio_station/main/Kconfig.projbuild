@@ -15,7 +15,7 @@ menu "Pollen Escape PlatformIO Station"
 
     config SENSOR_POST_URL
         string "Sensor POST URL"
-        default "http://10.104.85.85:5000/data"
+        default "https://btaknzxzeczz.sealoshzh.site/data"
 
     config SENSOR_DEVICE_ID
         string "Device ID"
