@@ -76,10 +76,10 @@ function buildLatestView(latest) {
       isFresh: false,
       ageSec: 0,
       onlineText: '未连接',
-      ageText: '绛夊緟璁惧涓婁紶鏁版嵁',
+      ageText: '等待设备上传数据',
       pollenText: '--',
       meterWidth: 0,
-      trendHint: '鏆傛棤瓒嬪娍',
+      trendHint: '暂无趋势',
     }
   }
 
@@ -100,7 +100,7 @@ function buildLatestView(latest) {
           ? '浓度中等，已达到开赛阈值（>=60）'
           : level === LEVEL.LOW
             ? '已接近安全区，当前不能开赛（需要>=60）'
-            : '绛夊緟瀹炴椂鏁版嵁'
+            : '等待实时数据'
   }
 
   return {
@@ -112,7 +112,7 @@ function buildLatestView(latest) {
     isFresh,
     ageSec,
     onlineText: ageSec <= 15 ? '已连接' : '连接波动',
-    ageText: `绾?{formatAgeText(ageSec)} 鏇存柊`,
+    ageText: `刚${formatAgeText(ageSec)}更新`,
     pollenText: Number.isFinite(pollenValue) ? pollenValue.toFixed(0) : '--',
     meterWidth: Number.isFinite(pollenValue) ? clamp((pollenValue / 150) * 100, 0, 100) : 0,
     trendHint,
