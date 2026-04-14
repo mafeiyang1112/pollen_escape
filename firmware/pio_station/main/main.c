@@ -9,6 +9,7 @@
 #include "esp_adc/adc_cali_scheme.h"
 #include "esp_adc/adc_oneshot.h"
 #include "esp_event.h"
+#include "esp_crt_bundle.h"
 #include "esp_http_client.h"
 #include "esp_log.h"
 #include "esp_netif.h"
@@ -422,6 +423,8 @@ static void post_sensor_data_once(void)
         .method = HTTP_METHOD_POST,
         .timeout_ms = 5000,
         .event_handler = http_client_event_handler,
+        // Use the built-in root CA bundle for HTTPS server verification.
+        .crt_bundle_attach = esp_crt_bundle_attach,
     };
 
     esp_http_client_handle_t client = esp_http_client_init(&config);
