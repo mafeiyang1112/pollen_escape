@@ -1,6 +1,17 @@
 const api = require('../../utils/api')
 const app = getApp()
 
+function normalizeUploadedAvatarUrl(url, apiBaseUrl) {
+  const value = String(url || '').trim()
+  if (!value) return ''
+
+  // If backend returns http behind a proxy while app uses https, upgrade URL for mini program image loading.
+  if (value.startsWith('http://') && String(apiBaseUrl || '').startsWith('https://')) {
+    return `https://${value.slice('http://'.length)}`
+  }
+  return value
+}
+
 Page({
   data: {
     openid: '',
@@ -23,7 +34,10 @@ Page({
   async onChooseAvatar(e) {
     const { avatarUrl: tempAvatarUrl } = e.detail
 
-    if (!this.data.openid) return
+    if (!this.data.openid || !tempAvatarUrl) {
+      wx.showToast({ title: '未获取到头像文件', icon: 'none' })
+      return
+    }
 
     try {
       wx.showLoading({ title: '上传头像中...' })
@@ -33,9 +47,13 @@ Page({
       })
 
       if (result && result.ok) {
-        // 处理HTTPS问题，在开发环境中使用默认头像
-        // 生产环境会使用HTTPS URL
-        const newAvatarUrl = '' // 清空头像URL，使用默认头像
+        const apiBaseUrl = app.globalData && app.globalData.apiBaseUrl
+        const newAvatarUrl = normalizeUploadedAvatarUrl(result.avatar_url, apiBaseUrl)
+
+        if (!newAvatarUrl) {
+          throw new Error('服务器未返回可用头像地址')
+        }
+
         this.setData({ avatarUrl: newAvatarUrl })
         wx.setStorageSync('avatarUrl', newAvatarUrl)
         app.globalData.userAvatarUrl = newAvatarUrl
@@ -50,7 +68,8 @@ Page({
       }
     } catch (err) {
       console.error('[profile] upload avatar failed', err)
-      wx.showToast({ title: '头像上传失败', icon: 'none' })
+      const msg = (err && err.message) ? String(err.message).slice(0, 28) : '头像上传失败'
+      wx.showToast({ title: msg, icon: 'none' })
     } finally {
       wx.hideLoading()
     }

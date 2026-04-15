@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿const api = require('./utils/api')
+const api = require('./utils/api')
 
 const LOCAL_API_BASE_URL = 'https://btaknzxzeczz.sealoshzh.site'
 const LAN_API_BASE_URL = 'https://btaknzxzeczz.sealoshzh.site'
