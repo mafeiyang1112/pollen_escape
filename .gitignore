@@ -1,3 +1,11 @@
 server/.venv/
 server/uploads/avatars/
 server/data/*.db
+server/__pycache__/
+server/database.db
+server/pollen_escape.db
+server/uploads/avatars/_probe.txt
+server/.env.local
+miniapp/project.private.config.json
+firmware/pio_station/build_output.log
+firmware/station/.tmp_docx/
