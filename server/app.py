@@ -756,10 +756,28 @@ def create_app() -> Flask:
         """上传头像文件"""
         if 'file' not in request.files:
             return err("No file part", 400, code="NO_FILE")
+
+        user_openid = str(request.form.get("user_openid", "")).strip()
         
         file = request.files['file']
         if file.filename == '':
             return err("No selected file", 400, code="NO_FILE_SELECTED")
+
+        # 同一用户已有头像时，直接复用，避免反复生成新文件。
+        if user_openid:
+            db = get_db()
+            existing_user = db.execute(
+                "SELECT avatar_url FROM users WHERE openid = ?",
+                (user_openid,),
+            ).fetchone()
+            if existing_user is not None:
+                existing_avatar_url = str(existing_user["avatar_url"] or "").strip()
+                if existing_avatar_url:
+                    return jsonify({
+                        "ok": True,
+                        "avatar_url": existing_avatar_url,
+                        "reused": True,
+                    })
         
         # 生成唯一文件名
         import uuid
@@ -783,7 +801,8 @@ def create_app() -> Flask:
         
         return jsonify({
             "ok": True,
-            "avatar_url": avatar_url
+            "avatar_url": avatar_url,
+            "reused": False,
         })
 
     @app.get("/healthz")
