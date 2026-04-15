@@ -694,18 +694,27 @@ def create_app() -> Flask:
         t_now = now_ms()
         
         # 如果用户要更新昵称，检查该昵称是否已被其他用户使用（唯一性检查）
+        # 但如果新昵称与当前用户的昵称相同，则允许（不报错）
         if nickname:
             existing_user = db.execute(
-                "SELECT openid FROM users WHERE nickname = ? AND openid != ?",
-                (nickname, user_openid)
+                "SELECT openid, nickname FROM users WHERE openid = ?",
+                (user_openid,),
             ).fetchone()
             
-            if existing_user:
-                return err(
-                    f"昵称'{nickname}'已被其他用户使用，请选择其他昵称", 
-                    status=409, 
-                    code="NICKNAME_ALREADY_TAKEN"
-                )
+            # 如果要改的昵称与当前昵称相同，则允许（不需要检查唯一性）
+            if existing_user and existing_user['nickname'] != nickname:
+                # 新昵称与当前昵称不同，需要检查是否被其他用户使用
+                taken = db.execute(
+                    "SELECT openid FROM users WHERE nickname = ? AND openid != ?",
+                    (nickname, user_openid)
+                ).fetchone()
+                
+                if taken:
+                    return err(
+                        f"昵称'{nickname}'已被其他用户使用，请选择其他昵称", 
+                        status=409, 
+                        code="NICKNAME_ALREADY_TAKEN"
+                    )
         
         existing_self = db.execute(
             "SELECT openid, nickname, avatar_url FROM users WHERE openid = ?",
