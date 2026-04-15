@@ -19,7 +19,7 @@ from flask import Flask, current_app, g, has_request_context, jsonify, request, 
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.getenv("POLLEN_DB_PATH", os.path.join(tempfile.gettempdir(), "pollen_escape.db"))
+DB_PATH = os.getenv("POLLEN_DB_PATH", os.path.join(BASE_DIR, "data", "pollen_escape.db"))
 WECHAT_CODE2SESSION_URL = "https://api.weixin.qq.com/sns/jscode2session"
 LOCAL_ENV_PATH = os.path.join(BASE_DIR, ".env.local")
 
@@ -44,6 +44,7 @@ def load_local_env(path: str) -> None:
 
 
 load_local_env(LOCAL_ENV_PATH)
+DB_PATH = os.getenv("POLLEN_DB_PATH", DB_PATH)
 
 
 def now_ms() -> int:

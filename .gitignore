@@ -1,2 +1,3 @@
 server/.venv/
 server/uploads/avatars/
+server/data/*.db
