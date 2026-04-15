@@ -327,7 +327,7 @@ Page({
     }
 
     if (this.data.dailyLimitReached) {
-      wx.showToast({ title: 'daily limit reached', icon: 'none' })
+      wx.showToast({ title: '今日挑战已达上限', icon: 'none' })
       return
     }
 
@@ -341,12 +341,12 @@ Page({
       return
     }
     if (!this.data.latestView.isFresh) {
-      wx.showToast({ title: 'waiting for fresh data', icon: 'none' })
+      wx.showToast({ title: '等待设备上传新数据', icon: 'none' })
       return
     }
     const currentPollen = Number(this.data.latest && this.data.latest.pollen_value)
     if (!Number.isFinite(currentPollen) || currentPollen < 60) {
-      wx.showToast({ title: 'threshold not met (>=60 required)', icon: 'none' })
+      wx.showToast({ title: '浓度未达阈值（需要 ≥60）', icon: 'none' })
       return
     }
 
@@ -385,12 +385,12 @@ Page({
 
       if (e.code === 'DAILY_LIMIT_REACHED') {
         this.setData({ dailyLimitReached: true })
-        wx.showToast({ title: 'daily limit reached', icon: 'none' })
+        wx.showToast({ title: '今日挑战已达上限', icon: 'none' })
         return
       }
 
       if (e.code === 'START_THRESHOLD_NOT_MET') {
-        wx.showToast({ title: 'threshold not met (>=60 required)', icon: 'none' })
+        wx.showToast({ title: '浓度未达阈值（需要 ≥60）', icon: 'none' })
         return
       }
 
@@ -409,7 +409,7 @@ Page({
         matchId: this.data.activeMatchId,
         endReason: 'MANUAL_STOP_FROM_HOME',
       })
-      wx.showToast({ title: 'match stopped', icon: 'none' })
+        wx.showToast({ title: '挑战已停止', icon: 'none' })
       await this.refreshHome()
     } catch (e) {
       this.setData({ lastError: formatError(e, 'stop failed, retry later') })
@@ -420,7 +420,7 @@ Page({
 
   openMonthlyBoard() {
     if (!this.data.userOpenid) {
-      wx.showToast({ title: 'please login first', icon: 'none' })
+      wx.showToast({ title: '请先登录', icon: 'none' })
       setTimeout(() => {
         wx.navigateTo({ url: '/pages/login/login' })
       }, 500)
@@ -431,7 +431,7 @@ Page({
       url: '/pages/logs/logs',
       fail: (err) => {
         console.error('[index] failed to navigate to logs', err)
-        wx.showToast({ title: 'open page failed', icon: 'none' })
+        wx.showToast({ title: '打开页面失败', icon: 'none' })
       },
     })
   },
@@ -448,26 +448,26 @@ Page({
       })
       return
     }
-    wx.showToast({ title: 'no records yet', icon: 'none' })
+      wx.showToast({ title: '暂无记录', icon: 'none' })
   },
 
   showRules() {
-    const soundStateText = this.data.soundEnabled ? 'on' : 'off'
+    const soundStateText = this.data.soundEnabled ? '开' : '关'
     wx.showModal({
-      title: 'Rules',
+      title: '玩法说明',
       content:
-        'Move to lower concentration areas for higher score.\n' +
-        'Start threshold: concentration >= 60.\n' +
-        'Speaker sound: ' + soundStateText + '.',
+        '在低浓度区域逃离可获得更高分数。\n' +
+        '开赛阈值：浓度 ≥ 60。\n' +
+        '警报声音：' + soundStateText + '。',
       showCancel: false,
     })
   },
 
   changeNickname() {
     wx.showModal({
-      title: 'Change Nickname',
+      title: '修改昵称',
       editable: true,
-      placeholderText: 'Enter nickname',
+      placeholderText: '请输入昵称',
       content: this.data.nickname,
       success: async (res) => {
         if (res.confirm && res.content) {
@@ -481,10 +481,10 @@ Page({
             })
             wx.setStorageSync('nickname', newNickname)
             this.setData({ nickname: newNickname })
-            wx.showToast({ title: 'updated', icon: 'success' })
+            wx.showToast({ title: '更新成功', icon: 'success' })
             this.refreshHome()
           } catch (e) {
-            wx.showToast({ title: 'update failed', icon: 'none' })
+            wx.showToast({ title: '更新失败', icon: 'none' })
           }
         }
       },
@@ -530,7 +530,7 @@ Page({
         }
 
         this.syncTestMode()
-        wx.showToast({ title: 'switched: ' + nextModeText, icon: 'none' })
+        wx.showToast({ title: '已切换：' + nextModeText, icon: 'none' })
         setTimeout(() => {
           wx.reLaunch({ url: '/pages/index/index' })
         }, 280)
@@ -550,11 +550,11 @@ Page({
       if (deviceId) {
         await api.setDeviceSound({ deviceId, soundEnabled })
       }
-      wx.showToast({ title: soundEnabled ? 'sound on' : 'sound off', icon: 'success' })
+      wx.showToast({ title: soundEnabled ? '声音已开启' : '声音已关闭', icon: 'success' })
     } catch (err) {
       this.setData({ soundEnabled: prevEnabled })
       app.setSoundEnabled(prevEnabled)
-      wx.showToast({ title: 'device sync failed', icon: 'none' })
+      wx.showToast({ title: '设备同步失败', icon: 'none' })
     }
   },
 
