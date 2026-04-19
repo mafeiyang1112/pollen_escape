@@ -17,10 +17,13 @@
     <view class="avatar-section">
       <button class="avatar-wrapper" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
         <image
+          wx:if="{{avatarUrl}}"
           class="avatar"
-          src="{{avatarUrl || 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'}}"
+          src="{{avatarUrl}}"
           mode="aspectFill"
+          binderror="onAvatarLoadError"
         ></image>
+        <view wx:else class="avatar-placeholder">头像</view>
       </button>
       <view class="avatar-tip">点击选择头像</view>
     </view>
@@ -45,13 +48,6 @@
         disabled="{{loading}}"
       >
         完成
-      </button>
-      <button
-        class="action-btn secondary-btn"
-        bindtap="onSkip"
-        disabled="{{loading}}"
-      >
-        跳过
       </button>
     </view>
 

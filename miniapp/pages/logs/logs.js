@@ -1,6 +1,6 @@
 const api = require('../../utils/api')
 
-const DEFAULT_AVATAR = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
+const DEFAULT_AVATAR = '/assets/default-avatar.png'
 
 Page({
   data: {
@@ -65,6 +65,16 @@ Page({
 
   goBack() {
     wx.navigateBack({ delta: 1 })
+  },
+
+  onItemAvatarError(e) {
+    const idx = Number(e.currentTarget.dataset.idx)
+    if (!Number.isInteger(idx) || idx < 0 || idx >= this.data.leaderboard.length) {
+      return
+    }
+    this.setData({
+      [`leaderboard[${idx}].avatar_url`]: ''
+    })
   },
 
   async loadLeaderboard() {

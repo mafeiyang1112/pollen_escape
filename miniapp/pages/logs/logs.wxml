@@ -64,6 +64,8 @@
                 class="user-avatar" 
                 src="{{item.avatar_url || DefaultAvatar}}" 
                 mode="aspectFill"
+                data-idx="{{idx}}"
+                binderror="onItemAvatarError"
               />
               <view class="user-name-wrap">
                 <view class="user-name">{{item.nickname || '花粉挑战者'}}</view>

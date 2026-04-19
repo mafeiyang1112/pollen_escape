@@ -2,7 +2,7 @@
   <view class="hero-head">
     <view class="hero-row">
       <view class="hero-user" bindtap="goToLogin">
-        <image class="hero-avatar" src="{{avatarUrl || '/assets/default-avatar.png'}}"></image>
+        <image class="hero-avatar" src="{{avatarUrl || '/assets/default-avatar.png'}}" binderror="onAvatarLoadError"></image>
         <view class="hero-name">{{nickname}}</view>
       </view>
     </view>

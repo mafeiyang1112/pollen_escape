@@ -21,6 +21,12 @@ Page({
     lastError: '',
   },
 
+  onAvatarLoadError() {
+    if (this.data.avatarUrl) {
+      this.setData({ avatarUrl: '' })
+    }
+  },
+
   onLoad(options) {
     const openid = options.openid || ''
     if (!openid) {
@@ -28,13 +34,34 @@ Page({
       setTimeout(() => wx.navigateBack(), 1000)
       return
     }
-    this.setData({ openid })
+    const nickname = wx.getStorageSync('nickname') || ''
+    const avatarUrl = normalizeUploadedAvatarUrl(
+      wx.getStorageSync('avatarUrl') || '',
+      app.globalData && app.globalData.apiBaseUrl
+    )
+    this.setData({ openid, nickname, avatarUrl })
   },
 
   async onChooseAvatar(e) {
-    const { avatarUrl: tempAvatarUrl } = e.detail
+    const detail = (e && e.detail) || {}
+    const errMsg = String(detail.errMsg || '')
+    const tempAvatarUrl = String(detail.avatarUrl || '')
 
-    if (!this.data.openid || !tempAvatarUrl) {
+    if (errMsg.includes('chooseAvatar:fail cancel')) {
+      return
+    }
+
+    if (errMsg && errMsg.includes('chooseAvatar:fail')) {
+      wx.showToast({ title: '头像选择失败，请重试', icon: 'none' })
+      return
+    }
+
+    if (!this.data.openid) {
+      wx.showToast({ title: '缺少用户标识，请重新进入页面', icon: 'none' })
+      return
+    }
+
+    if (!tempAvatarUrl) {
       wx.showToast({ title: '未获取到头像文件', icon: 'none' })
       return
     }
@@ -58,10 +85,12 @@ Page({
         wx.setStorageSync('avatarUrl', newAvatarUrl)
         app.globalData.userAvatarUrl = newAvatarUrl
 
-        await api.updateUserProfile({
-          userOpenid: this.data.openid,
-          avatarUrl: newAvatarUrl,
-        })
+        if (!result.reused) {
+          await api.updateUserProfile({
+            userOpenid: this.data.openid,
+            avatarUrl: newAvatarUrl,
+          })
+        }
         wx.showToast({ title: '头像上传成功', icon: 'success' })
       } else {
         wx.showToast({ title: '头像上传失败', icon: 'none' })
@@ -136,13 +165,4 @@ Page({
     }
   },
 
-  onSkip() {
-    const { openid } = this.data
-
-    wx.setStorageSync('user_openid', openid)
-    app.globalData.userOpenid = openid
-
-    wx.showToast({ title: '跳过设置', icon: 'none' })
-    setTimeout(() => wx.reLaunch({ url: '/pages/index/index' }), 500)
-  },
 })

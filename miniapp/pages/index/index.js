@@ -64,6 +64,8 @@ function normalizeAvatarUrl(url) {
   return value
 }
 
+const DEFAULT_AVATAR = '/assets/default-avatar.png'
+
 function buildLatestView(latest) {
   if (!latest) {
     const level = LEVEL.UNKNOWN
@@ -301,7 +303,7 @@ Page({
         activeMatchId,
         recentMatches,
         nickname: backendNickname || this.data.nickname || '闁奸缚浜惌鍥箰閹寸偛鐏涢柤?',
-        avatarUrl: backendAvatar || this.data.avatarUrl || 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0',
+        avatarUrl: backendAvatar || this.data.avatarUrl || DEFAULT_AVATAR,
         monthlyScore: monthly.totalScore,
         monthlyRank: monthly.rank,
         themeClass: latestView.themeClass,
@@ -318,6 +320,12 @@ Page({
     wx.navigateTo({
       url: `/pages/match/match?match_id=${encodeURIComponent(matchId)}`,
     })
+  },
+
+  onAvatarLoadError() {
+    if (this.data.avatarUrl !== DEFAULT_AVATAR) {
+      this.setData({ avatarUrl: DEFAULT_AVATAR })
+    }
   },
 
     async startChallenge() {
