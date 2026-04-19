@@ -213,6 +213,34 @@
   border-radius: 32rpx;
 }
 
+.player-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 18rpx;
+}
+
+.player-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 6rpx solid rgba(255, 255, 255, 0.92);
+  background: #f3f4f6;
+  box-shadow: 0 10rpx 22rpx rgba(15, 23, 42, 0.14);
+}
+
+.player-nickname {
+  margin-top: 12rpx;
+  max-width: 420rpx;
+  font-size: 30rpx;
+  line-height: 1.25;
+  font-weight: 700;
+  color: #334155;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .score-label {
   font-size: 32rpx;
   color: #6b7280;

@@ -1,4 +1,14 @@
 const api = require('../../utils/api')
+const DEFAULT_AVATAR = '/assets/default-avatar.png'
+
+function normalizeAvatarUrl(url) {
+  const value = String(url || '').trim()
+  if (!value) return ''
+  if (value.startsWith('http://') || value.startsWith('https://')) {
+    return value
+  }
+  return ''
+}
 
 const LEVEL = {
   HIGH: 'high',
@@ -95,6 +105,8 @@ Page({
     chartHeight: 220,
     chartStyle: 'width: 320px; height: 110px;',
     generatingPoster: false,
+    playerNickname: '',
+    playerAvatarUrl: DEFAULT_AVATAR,
   },
 
   onLoad(options) {
@@ -106,7 +118,15 @@ Page({
       chartWidth: width,
       chartHeight: height,
       chartStyle: `width: ${width}px; height: ${height}px;`,
+      playerNickname: wx.getStorageSync('nickname') || '',
+      playerAvatarUrl: normalizeAvatarUrl(wx.getStorageSync('avatarUrl')) || DEFAULT_AVATAR,
     })
+  },
+
+  onPlayerAvatarError() {
+    if (this.data.playerAvatarUrl !== DEFAULT_AVATAR) {
+      this.setData({ playerAvatarUrl: DEFAULT_AVATAR })
+    }
   },
 
   onShow() {
@@ -133,6 +153,30 @@ Page({
 
       const match = realtime.match || null
       const samples = sampleRes.samples || []
+      const matchUserOpenid = String((match && match.user_openid) || '').trim()
+      let profileUser = null
+
+      if (matchUserOpenid) {
+        try {
+          const profileRes = await api.getUserProfile(matchUserOpenid)
+          profileUser = profileRes && profileRes.user
+        } catch (err) {
+          console.warn('[result] getUserProfile failed, using local cache', err)
+        }
+      }
+
+      const backendNickname = String((profileUser && profileUser.nickname) || '').trim()
+      const backendAvatar = normalizeAvatarUrl(profileUser && profileUser.avatar_url)
+      const localNickname = String(wx.getStorageSync('nickname') || '').trim()
+      const localAvatar = normalizeAvatarUrl(wx.getStorageSync('avatarUrl'))
+      const playerNickname = backendNickname || localNickname || '花粉挑战者'
+      const playerAvatarUrl = backendAvatar || localAvatar || DEFAULT_AVATAR
+
+      wx.setStorageSync('nickname', playerNickname)
+      if (playerAvatarUrl && playerAvatarUrl !== DEFAULT_AVATAR) {
+        wx.setStorageSync('avatarUrl', playerAvatarUrl)
+      }
+
       const level = getLevel(
         samples.length
           ? Number(samples[samples.length - 1].smoothed_value || samples[samples.length - 1].raw_value)
@@ -145,6 +189,8 @@ Page({
         leaderboard: leaderboardRes.leaderboard || [],
         resultView: buildResultView(match),
         statusClass: toStatusClass(level),
+        playerNickname,
+        playerAvatarUrl,
       })
       this.drawTrend(samples, level)
     } catch (e) {
@@ -235,6 +281,9 @@ Page({
       const rv = this.data.resultView
       const level = this.data.statusClass
       const color = level === 'status-high' ? '#FF6B6B' : level === 'status-mid' ? '#FF9A9E' : '#A8EDEA'
+      const rawNickname = String(this.data.playerNickname || wx.getStorageSync('nickname') || '花粉挑战者').trim()
+      const nickname = rawNickname.length > 10 ? `${rawNickname.slice(0, 10)}…` : rawNickname
+      const avatarUrl = normalizeAvatarUrl(this.data.playerAvatarUrl || wx.getStorageSync('avatarUrl')) || DEFAULT_AVATAR
 
       // 获取 Canvas 2D 实例
       const canvasNode = await new Promise(resolve => {
@@ -281,7 +330,7 @@ Page({
 
       // 战绩卡主体
       const cardY = 280
-      const cardH = 460
+      const cardH = 560
       const cardW = 552
       const cardX = (w - cardW) / 2
 
@@ -294,22 +343,40 @@ Page({
       ctx.fill()
       ctx.restore()
 
+      // 用户信息：头像 + 昵称
+      const avatarSize = 112
+      const avatarX = w / 2 - avatarSize / 2
+      const avatarY = cardY + 42
+      await this.drawPosterAvatar(ctx, canvas, avatarUrl, avatarX, avatarY, avatarSize)
+
+      ctx.fillStyle = '#334155'
+      ctx.font = 'bold 30px sans-serif'
+      ctx.textAlign = 'center'
+      ctx.fillText(nickname || '花粉挑战者', w / 2, avatarY + avatarSize + 48)
+
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.22)'
+      ctx.lineWidth = 2
+      ctx.beginPath()
+      ctx.moveTo(cardX + 56, avatarY + avatarSize + 72)
+      ctx.lineTo(cardX + cardW - 56, avatarY + avatarSize + 72)
+      ctx.stroke()
+
       // 得分标签
       ctx.fillStyle = '#6B7280'
       ctx.font = '32px sans-serif'
       ctx.textAlign = 'center'
-      ctx.fillText('本局得分', w / 2, cardY + 90)
+      ctx.fillText('本局得分', w / 2, cardY + 280)
 
       // 得分数字
-      const scoreGradient = ctx.createLinearGradient(w / 2 - 100, cardY + 130, w / 2 + 100, cardY + 230)
+      const scoreGradient = ctx.createLinearGradient(w / 2 - 100, cardY + 310, w / 2 + 100, cardY + 430)
       scoreGradient.addColorStop(0, '#FFB703')
       scoreGradient.addColorStop(1, '#FFD166')
       ctx.fillStyle = scoreGradient
       ctx.font = 'bold 130px sans-serif'
-      ctx.fillText(String(rv.finalScore), w / 2, cardY + 220)
+      ctx.fillText(String(rv.finalScore), w / 2, cardY + 410)
 
       // 排名
-      const rankY = cardY + 300
+      const rankY = cardY + 450
       const rankH = 70
       const rankW = cardW - 160
       const rankX = cardX + 80
@@ -325,8 +392,8 @@ Page({
 
       // 装饰元素
       ctx.font = '30px sans-serif'
-      ctx.fillText('🌸', cardX + 60, cardY + 120)
-      ctx.fillText('🌸', cardX + cardW - 60, cardY + 120)
+      ctx.fillText('🌸', cardX + 60, cardY + 300)
+      ctx.fillText('🌸', cardX + cardW - 60, cardY + 300)
 
       // 导出高清图片
       const temp = await new Promise((resolve, reject) => {
@@ -363,6 +430,72 @@ Page({
 
   backHome() {
     wx.reLaunch({ url: '/pages/index/index' })
+  },
+
+  loadCanvasImage(canvas, src) {
+    const value = String(src || '').trim()
+    if (!value) return Promise.resolve(null)
+
+    return new Promise((resolve) => {
+      try {
+        const img = canvas.createImage()
+        img.onload = () => resolve(img)
+        img.onerror = () => resolve(null)
+        img.src = value
+      } catch (e) {
+        resolve(null)
+      }
+    })
+  },
+
+  async drawPosterAvatar(ctx, canvas, avatarUrl, x, y, size) {
+    const candidates = []
+    const primary = String(avatarUrl || '').trim()
+    const fallback = String(DEFAULT_AVATAR).trim()
+    if (primary) candidates.push(primary)
+    if (fallback && fallback !== primary) candidates.push(fallback)
+
+    let image = null
+    for (let i = 0; i < candidates.length; i += 1) {
+      image = await this.loadCanvasImage(canvas, candidates[i])
+      if (image) break
+    }
+
+    const r = size / 2
+    const cx = x + r
+    const cy = y + r
+
+    // Outer ring and subtle shadow for a floating badge look.
+    ctx.save()
+    ctx.shadowColor = 'rgba(15, 23, 42, 0.16)'
+    ctx.shadowBlur = 12
+    ctx.shadowOffsetY = 6
+    ctx.fillStyle = '#FFFFFF'
+    ctx.beginPath()
+    ctx.arc(cx, cy, r + 6, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.restore()
+
+    if (image) {
+      ctx.save()
+      ctx.beginPath()
+      ctx.arc(cx, cy, r, 0, Math.PI * 2)
+      ctx.clip()
+      ctx.drawImage(image, x, y, size, size)
+      ctx.restore()
+      return
+    }
+
+    ctx.save()
+    ctx.fillStyle = '#E2E8F0'
+    ctx.beginPath()
+    ctx.arc(cx, cy, r, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.fillStyle = '#64748B'
+    ctx.font = 'bold 34px sans-serif'
+    ctx.textAlign = 'center'
+    ctx.fillText('花', cx, cy + 12)
+    ctx.restore()
   },
 
   drawRoundRect(ctx, x, y, width, height, radius) {

@@ -23,6 +23,15 @@
   </view>
 
   <view class="card score-card glass-card">
+    <view class="player-profile">
+      <image
+        class="player-avatar"
+        src="{{playerAvatarUrl || '/assets/default-avatar.png'}}"
+        mode="aspectFill"
+        binderror="onPlayerAvatarError"
+      ></image>
+      <view class="player-nickname">{{playerNickname || '花粉挑战者'}}</view>
+    </view>
     <view class="score-label">本局得分</view>
     <view class="final-score">{{resultView.finalScore}}</view>
     <view class="rank-container">
